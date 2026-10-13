@@ -1,5 +1,12 @@
 /**
  * Shree Varshan P - Portfolio Interactions & Utilities
+ * Features:
+ * - Clean Light Theme by default (with Dark Mode toggle & storage)
+ * - Mobile Navigation Drawer
+ * - Smooth Scrolling with Header Offset
+ * - ScrollSpy for Active Navigation
+ * - Clipboard Copying with Toast Notifications
+ * - Slide-over Placeholder Editing Guide
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,28 +19,27 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * 1. Theme Management (Dark / Light with System Preference & LocalStorage)
+ * 1. Theme Management (Default: Clean Light Theme, with Dark Mode Option)
  */
 function initThemeToggle() {
   const themeToggle = document.getElementById('themeToggle');
-  const storedTheme = localStorage.getItem('sv_theme');
-  const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+  const storedTheme = localStorage.getItem('sv_portfolio_theme');
 
-  // Set theme (default: dark)
-  if (storedTheme === 'light' || (!storedTheme && systemPrefersLight)) {
-    document.documentElement.setAttribute('data-theme', 'light');
-  } else {
+  // Default theme is 'light' as requested for the vibrant aesthetic on clean light background
+  if (storedTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
   }
 
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
       document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('sv_theme', newTheme);
-      showToast(`Switched to ${newTheme} mode`);
+      localStorage.setItem('sv_portfolio_theme', newTheme);
+      showToast(`Switched to ${newTheme} theme`);
     });
   }
 }
@@ -97,7 +103,7 @@ function initClipboardButtons() {
 
   function giveButtonFeedback(btn) {
     if (btn.classList.contains('mini-copy-btn')) {
-      btn.style.color = 'var(--accent-emerald)';
+      btn.style.color = 'var(--emerald)';
       setTimeout(() => {
         btn.style.color = '';
       }, 1800);
@@ -106,7 +112,7 @@ function initClipboardButtons() {
 
     const originalText = btn.textContent;
     btn.textContent = 'Copied!';
-    btn.style.color = 'var(--accent-emerald)';
+    btn.style.color = 'var(--emerald)';
     setTimeout(() => {
       btn.textContent = originalText;
       btn.style.color = '';
@@ -189,7 +195,7 @@ function initSmoothScroll() {
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
         e.preventDefault();
-        const headerOffset = 76;
+        const headerOffset = 78;
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -203,7 +209,7 @@ function initSmoothScroll() {
 }
 
 /**
- * 6. Guide Drawer (Slide-over cheat sheet for editing placeholders)
+ * 6. Guide Drawer (Slide-over instructions for editing placeholders)
  */
 function initGuideDrawer() {
   const guideBtn = document.getElementById('guideToggleBtn');

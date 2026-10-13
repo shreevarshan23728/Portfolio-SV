@@ -1,99 +1,105 @@
 # Shree Varshan P - Developer Portfolio Website
 
-A colorful, modern, and recruiter-friendly portfolio website tailored for **Shree Varshan P**, Software Student in Artificial Intelligence and Data Science (AI&DS) at Rathinam College, Coimbatore.
+A vibrant, colorful, and recruiter-ready personal portfolio website built for **Shree Varshan P**, Software Student in **Artificial Intelligence and Data Science (AI&DS)** at **Rathinam College, Coimbatore**.
 
 ---
 
-## 🌟 Key Highlights & Design Features
+## 🎨 Visual Aesthetics & Palette
 
-- **Recruiter-Friendly Design:** High-contrast contact triggers, verified phone number (`9994819939`), Coimbatore location, and quick actions to view projects or get in touch.
-- **Colorful & Polished Aesthetics:** Dynamic ambient glow backdrops, vibrant gradient accents (indigo, cyan, violet, rose, amber), glassmorphism cards, and fluid micro-animations.
-- **100% Genuine & Honest:** No skills, projects, or achievements were fabricated. All unverified items are presented as distinctly styled, editable placeholders.
-- **Dark & Light Modes:** Built-in theme switcher that respects system preference and persists user choice in `localStorage`.
-- **Interactive Tools:** One-click copy for phone and email with animated toast notifications, smooth scrolling, mobile navigation menu, and an interactive **Edit Guide** slide-over drawer.
-- **Zero Heavy Dependencies:** Built cleanly with semantic HTML5, modern vanilla CSS, and vanilla JavaScript for lightning-fast performance and 100% responsive design across all screen sizes.
+- **Base Canvas:** Clean, crisp light background with generous whitespace.
+- **Vibrant Accent Palette:** Electric Blue (`#0066ff`), Coral (`#ff5252`), and Warm Yellow (`#f59e0b`).
+- **Playful Geometric Shapes:** Floating CSS & SVG geometric shapes (dashed rings, pills, 4-point stars, diamonds, dot matrices) with smooth, lightweight keyframe animations.
+- **Bold Modern Typography:** Headings in Google Fonts **Outfit** and body text in **Plus Jakarta Sans**, with monospaced badges in **JetBrains Mono**.
+- **Dark Mode Support:** Optional seamless theme toggle switch in the navigation bar.
 
 ---
 
-## 🚀 How to Run the Website Locally
+## 📋 Required Sections & Content Breakdown
 
-You can run this website on your Mac with any of the following methods:
+1. **Hero Section (`#hero`):**
+   - Title: *"Hi, I’m Shree Varshan"*
+   - Concise introduction as an AI&DS software student at Rathinam College, Coimbatore.
+   - Prominent call-to-action buttons: **"View My Work"** and **"Contact Me"**.
+   - Direct verified phone pill (`9994819939`) with one-click copy and call action.
+   - Interactive profile identity card featuring geometric badge accents and student details.
 
-### Option 1: Direct Browser Opening (Instant)
-Simply double-click `index.html` in Finder, or right-click `index.html` and choose **Open With > Google Chrome** (or Safari / Brave / Edge).
+2. **About Section (`#about`):**
+   - Short, friendly narrative focused on **continuous learning**, **structured problem-solving**, and **building useful technology**.
+   - Three dedicated visual pillar cards explaining Shree's engineering mindset.
 
-### Option 2: Local HTTP Server (Recommended)
-Open Terminal and run:
+3. **Education Section (`#education`):**
+   - **Institution:** Rathinam College, Coimbatore, Tamil Nadu, India.
+   - **Department:** Artificial Intelligence and Data Science (AI&DS).
+   - **Placeholders:** Degree (e.g. B.Tech / B.E. / B.Sc) and Expected Graduation Year (e.g. 2026).
+   - Core curriculum focus badges.
+
+4. **Skills Section (`#skills`):**
+   - 4 attractive, categorized skill cards:
+     1. Programming Languages
+     2. Frameworks & Web Tech
+     3. Developer Tools & Databases
+     4. AI & Core Foundations
+   - **Honest & Genuine:** Clearly marked editable placeholders (`[Programming Language 1]`, `[Framework 1]`, etc.) with amber tags so no skills are fabricated.
+
+5. **Projects Section (`#projects`):**
+   - 3 structured project cards:
+     - Project 01: Full-Stack Web Application placeholder
+     - Project 02: AI / Machine Learning Application placeholder
+     - Project 03: Software Utility / Automation Tool placeholder
+   - Clearly marked placeholders for project title, 2-3 sentence overview, key features, tech stack chips, and GitHub / Live Demo links.
+
+6. **Contact Section (`#contact`):**
+   - **Verified Phone:** `9994819939` (Call Now button, Copy button)
+   - **Location:** Coimbatore, India (Rathinam College)
+   - **Placeholders:**
+     - Email: `[your.email@example.com]`
+     - LinkedIn: `[linkedin.com/in/your-profile]`
+     - GitHub: `[github.com/your-username]`
+   - Direct recruiter callout banner.
+
+---
+
+## 🚀 How to Run Locally
+
+### Option 1: Direct Browser Opening
+Double-click `index.html` in Finder or open it directly in Google Chrome / Safari / Edge.
+
+### Option 2: Local HTTP Server
+Run in your terminal:
 ```bash
 cd /Users/shreevarshan/portfolio
-python3 -m http.server 3000
+python3 -m http.server 8080
 ```
-Then visit `http://localhost:3000` in your web browser.
+Then visit `http://localhost:8080` in your web browser.
 
 ---
 
-## ✏️ How to Replace the Placeholders with Your Details
+## ✏️ How to Replace the Placeholders
 
-Open `index.html` in your text editor (VS Code, Antigravity, etc.). Look for the bracketed placeholders (`[...]`) or search for the word `placeholder`:
+You can click the **"Edit Guide"** button in the website's top navigation bar to open an interactive slide-over cheat sheet, or follow these quick instructions directly in `index.html`:
 
-### 1. Education Section (`#education`)
-- **Graduation Year:** Search for `[Graduation Year: e.g. 2022 – 2026]` and change it to your actual batch (e.g., `2022 – 2026` or `2023 – 2027`).
-- **Degree:** Search for `[Degree Placeholder: e.g. B.Tech / B.E. / B.Sc in Artificial Intelligence and Data Science]` and replace it with your exact degree (e.g., `B.Tech in Artificial Intelligence & Data Science`).
+1. **Education (`#education`):**
+   - Search for `[Expected Graduation:` and update your year (e.g. `2022 – 2026`).
+   - Search for `[Degree Placeholder:` and specify your exact degree (e.g. `B.Tech in Artificial Intelligence & Data Science`).
 
-### 2. Skills Section (`#skills`)
-In `index.html`, locate the four skill categories:
-- **Programming Languages:** Replace `[Programming Language 1]`, `[Programming Language 2]`, etc. with the languages you know (e.g. `Python`, `Java`, `C++`, `JavaScript`, `SQL`).
-- **Frameworks & Web:** Replace `[Framework / Library 1]`, etc. with your tools (e.g. `React`, `Node.js`, `Flask`, `Django`, `Express`).
-- **Tools & Databases:** Replace `[Database 1]` and `[Dev Tool 1]` (e.g. `MySQL`, `MongoDB`, `Git & GitHub`, `VS Code`, `Postman`).
-- **Academic Foundations:** Customize or keep `Data Structures & Algorithms`, `Machine Learning Basics`, `Database Systems`, etc.
+2. **Skills (`#skills`):**
+   - In each category, replace `[Programming Language 1]`, `[Framework 1]`, `[Database 1]`, etc., with your actual languages (e.g. `Python`, `Java`, `C++`, `React`, `MySQL`, `Git`).
 
-*Tip:* When you replace a placeholder skill with your verified skill, you can remove the `placeholder-pill` class from the `<div>` to style it as a normal active skill!
+3. **Projects (`#projects`):**
+   - Update `[Project 1 Title]`, `[Project 2 Title]`, `[Project 3 Title]` with your project names.
+   - Fill in the 2-3 sentence description and key bullet points.
+   - Replace the `href="#contact"` placeholder links with your actual GitHub repository URLs.
 
-### 3. Projects Section (`#projects`)
-Each project card has clearly marked placeholders:
-- **Title:** Replace `[Project 1 Title: ...]` with your real project name.
-- **Description:** Replace the 2-3 sentence overview explaining what problem your project solves.
-- **Key Features:** Replace the bullet points with the main technical achievements.
-- **Tech Stack:** Replace `[Tech 1]`, `[Tech 2]` with the actual technologies used.
-- **Links:** Replace `href="#contact"` with your actual GitHub repository URL (e.g., `https://github.com/shreevarshan/my-project`) or live demo URL.
-
-### 4. Contact Section (`#contact`)
-- **Email:** Search for `[your.email@example.com]` and replace it with your actual email address (update both the visible text and the `mailto:` attribute).
-- **LinkedIn:** Search for `[your-linkedin-handle]` and update the link with your profile URL (e.g. `https://linkedin.com/in/shreevarshan-p`).
-- **Phone (`9994819939`) & Location (`Coimbatore`):** Already pre-configured and active!
+4. **Contact (`#contact`):**
+   - Replace `[your.email@example.com]` with your email (in both the text and the `mailto:` link).
+   - Replace `[linkedin.com/in/your-profile]` with your LinkedIn link.
+   - Replace `[github.com/your-username]` with your GitHub URL.
 
 ---
 
-## 🌐 Free Online Deployment Guide
+## 📱 Responsive & Accessible Standards
 
-### Deploying to GitHub Pages (Recommended & 100% Free)
-1. Create a free account on [GitHub](https://github.com).
-2. Create a new repository named `portfolio` (or `<your-username>.github.io`).
-3. In your local terminal, run:
-   ```bash
-   cd /Users/shreevarshan/portfolio
-   git init
-   git add .
-   git commit -m "Initial portfolio release"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/portfolio.git
-   git push -u origin main
-   ```
-4. On GitHub, navigate to **Settings > Pages**, choose the `main` branch, and click **Save**.
-5. Your portfolio will be live at: `https://<your-username>.github.io/portfolio/`!
-
-### Deploying to Vercel or Netlify
-- Go to [Vercel](https://vercel.com) or [Netlify](https://www.netlify.com).
-- Simply drag and drop the `portfolio` folder to deploy with custom domains and free HTTPS.
-
----
-
-## 📁 Project Structure
-
-```
-portfolio/
-├── index.html       # Semantic HTML5 structure, SEO meta tags, and all 6 required sections
-├── style.css        # Modern CSS design system, ambient mesh glow, vibrant gradients, dark/light mode
-├── script.js        # Theme toggle, clipboard utility, toast notifications, scrollspy & guide drawer
-└── README.md        # Comprehensive documentation and customization guide
-```
+- 100% responsive across mobile phones, tablets, and large desktop screens.
+- Accessible ARIA labels and semantic HTML5 (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`).
+- High-contrast text exceeding WCAG AA standards.
+- Respects `prefers-reduced-motion` for smooth, comfortable browsing.
