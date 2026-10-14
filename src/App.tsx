@@ -1,218 +1,74 @@
-import { useState, useRef } from 'react';
-import { Scene } from './components/3d/Scene';
+import { useState, useEffect } from 'react';
+import { CustomCursor } from './components/ui/CustomCursor';
 import { Navigation } from './components/ui/Navigation';
-import { TelemetryHUD } from './components/ui/TelemetryHUD';
-import { ScrollProgress } from './components/ui/ScrollProgress';
-import { ArtifactModal } from './components/ui/ArtifactModal';
-import { FreeFlyControls } from './components/ui/FreeFlyControls';
-import { SectionHero } from './components/sections/SectionHero';
-import { SectionTransform } from './components/sections/SectionTransform';
-import { SectionImmersion } from './components/sections/SectionImmersion';
-import { SectionInteractive } from './components/sections/SectionInteractive';
-import { SectionFinal } from './components/sections/SectionFinal';
-import { useGSAPScrollTrigger } from './hooks/useGSAPScrollTrigger';
-import type { ArtifactData } from './types';
-import { ARTIFACTS } from './components/3d/InteractiveArtifacts';
-import { sound } from './utils/sound';
+import { Hero } from './components/sections/Hero';
+import { About } from './components/sections/About';
+import { ProjectGallery } from './components/sections/ProjectGallery';
+import { DigitalPlayground } from './components/sections/DigitalPlayground';
+import { TechStack } from './components/sections/TechStack';
+import { ExperimentsSection } from './components/sections/ExperimentsSection';
+import { Contact } from './components/sections/Contact';
 
 export default function App() {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const scrollTrackRef = useRef<HTMLDivElement>(null);
+  const [activeSection, setActiveSection] = useState<string>('home');
 
-  // Unified master GSAP ScrollTrigger timeline state
-  const sceneState = useGSAPScrollTrigger(scrollContainerRef, scrollTrackRef);
+  useEffect(() => {
+    const sectionIds = ['home', 'about', 'projects', 'experiments', 'engine', 'contact'];
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + window.innerHeight * 0.35;
 
-  const [selectedArtifact, setSelectedArtifact] = useState<ArtifactData | null>(null);
-  const [isFreeFly, setIsFreeFly] = useState<boolean>(false);
-  const [isCinemaBars, setIsCinemaBars] = useState<boolean>(false);
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i];
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.offsetTop;
+          if (scrollPos >= top) {
+            setActiveSection(id);
+            break;
+          }
+        }
+      }
+    };
 
-  const handleNavigateToSection = (sectionIndex: number) => {
-    const track = scrollTrackRef.current;
-    if (!track) return;
-    const totalHeight = track.scrollHeight - window.innerHeight;
-    const targets = [0, 0.24, 0.48, 0.72, 1.0];
-    window.scrollTo({
-      top: targets[sectionIndex] * totalHeight,
-      behavior: 'smooth'
-    });
-  };
-
-  const handleRestart = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
-
-  const handleNextArtifact = () => {
-    if (!selectedArtifact) {
-      setSelectedArtifact(ARTIFACTS[0]);
-      return;
-    }
-    const currentIndex = ARTIFACTS.findIndex(a => a.id === selectedArtifact.id);
-    const nextIndex = (currentIndex + 1) % ARTIFACTS.length;
-    sound.playChime(700 + nextIndex * 100, 0.3);
-    setSelectedArtifact(ARTIFACTS[nextIndex]);
-  };
-
-  const p = sceneState.progress;
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div ref={scrollContainerRef} className="relative bg-[#030305] text-white selection:bg-neon-cyan selection:text-black">
-      {/* Subtle Visual Textures */}
+    <div className="relative min-h-screen w-full bg-[#050505] text-[#f1f5f9] selection:bg-[#00f0ff] selection:text-[#050505] overflow-x-hidden">
+      {/* Precision Trailing Custom Cursor */}
+      <CustomCursor />
+
+      {/* Subtle Atmospheric Textures */}
       <div className="film-grain" aria-hidden="true" />
       <div className="scanlines" aria-hidden="true" />
 
-      {/* Optional 2.39:1 Anamorphic Cinema Letterbox Bars */}
-      {isCinemaBars && (
-        <>
-          <div className="fixed top-0 left-0 right-0 h-10 sm:h-14 bg-black z-50 pointer-events-none border-b border-white/5 flex items-center justify-between px-8 text-[9px] font-mono text-gray-500 uppercase tracking-widest transition-all">
-            <span>ARRI ALEXA 65 // 2.39:1 ANAMORPHIC</span>
-            <span>SHUTTER: 180° // T1.5 // COLOR: ACEScc</span>
-          </div>
-          <div className="fixed bottom-0 left-0 right-0 h-10 sm:h-14 bg-black z-50 pointer-events-none border-t border-white/5 flex items-center justify-between px-8 text-[9px] font-mono text-gray-500 uppercase tracking-widest transition-all">
-            <span>SCENE // GSAP SCROLLTRIGGER 3D</span>
-            <span>PROGRESS // {Math.round(p * 100)}%</span>
-          </div>
-        </>
-      )}
+      {/* Floating Minimal Navigation Bar */}
+      <Navigation activeSection={activeSection} />
 
-      {/* Pinned 3D WebGL Scene */}
-      <Scene
-        sceneState={sceneState}
-        selectedArtifact={selectedArtifact}
-        onSelectArtifact={setSelectedArtifact}
-        isFreeFly={isFreeFly}
-      />
+      {/* Main Sections */}
+      <main className="w-full">
+        {/* 02. HERO SECTION — The Wow Experience */}
+        <Hero />
 
-      {/* Top HUD Navigation */}
-      <Navigation
-        activeSection={sceneState.activeAct}
-        isFreeFly={isFreeFly}
-        isCinemaBars={isCinemaBars}
-        onToggleFreeFly={() => setIsFreeFly(!isFreeFly)}
-        onToggleCinemaBars={() => setIsCinemaBars(!isCinemaBars)}
-        onNavigateToSection={handleNavigateToSection}
-      />
+        {/* 04. ABOUT ME — Digital Identity */}
+        <About />
 
-      {/* Live System Diagnostics & Coordinates HUD */}
-      <TelemetryHUD
-        scrollProgress={sceneState.progress}
-        activeSection={sceneState.activeAct}
-      />
+        {/* 05. SELECTED WORK — Immersive Project Gallery */}
+        <ProjectGallery />
 
-      {/* Vertical Chapter Scroll Progress Rail */}
-      <ScrollProgress
-        scrollProgress={sceneState.progress}
-        activeSection={sceneState.activeAct}
-        onNavigateToSection={handleNavigateToSection}
-      />
+        {/* 06. 3D DIGITAL PLAYGROUND — Enter the Experiment */}
+        <DigitalPlayground />
 
-      {/* Free-Fly Controls Banner */}
-      {isFreeFly && (
-        <FreeFlyControls onExit={() => setIsFreeFly(false)} />
-      )}
+        {/* 07. TECH STACK — The Engine Room */}
+        <TechStack />
 
-      {/* Holographic Relic Inspection Modal */}
-      <ArtifactModal
-        artifact={selectedArtifact}
-        onClose={() => setSelectedArtifact(null)}
-        onNext={handleNextArtifact}
-      />
+        {/* 08. EXPERIMENTS & MICRO-INTERACTIONS */}
+        <ExperimentsSection />
 
-      {/* =========================================================================
-          PINNED NARRATIVE STAGE WITH CHOREOGRAPHED GSAP TRANSITIONS
-          Each section animates with bespoke typography, avoiding repetitive fade-ins!
-          ========================================================================= */}
-      <div className="fixed inset-0 pointer-events-none z-10 flex flex-col justify-between overflow-hidden">
-        {/* ACT I: THE SINGULARITY (Active 0.00 -> 0.22) */}
-        <div
-          className="absolute inset-0 transition-all duration-300 pointer-events-none"
-          style={{
-            opacity: p < 0.18 ? 1 - p * 2.5 : 0,
-            transform: `translateY(${p < 0.22 ? p * -120 : -120}px) scale(${1 - p * 0.15})`,
-            filter: p > 0.10 ? `blur(${Math.min((p - 0.10) * 45, 12)}px)` : 'none',
-            visibility: p < 0.22 ? 'visible' : 'hidden',
-          }}
-        >
-          <SectionHero
-            onExplore={() => handleNavigateToSection(1)}
-            onInteractCore={() => {
-              sound.playResonancePulse();
-              const canvasEl = document.querySelector('canvas');
-              if (canvasEl) {
-                canvasEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-              }
-            }}
-          />
-        </div>
-
-        {/* ACT II: RECONFIGURATION (Active 0.22 -> 0.46) */}
-        <div
-          className="absolute inset-0 transition-all duration-300 pointer-events-none"
-          style={{
-            opacity: p >= 0.20 && p <= 0.44 ? Math.min((p - 0.20) * 10, 1) * Math.min((0.44 - p) * 10, 1) : 0,
-            transform: `translateX(${p < 0.26 ? (0.26 - p) * -180 : p > 0.40 ? (p - 0.40) * -180 : 0}px)`,
-            filter: p < 0.22 || p > 0.42 ? `blur(${Math.abs(p - 0.32) * 20}px)` : 'none',
-            visibility: p >= 0.18 && p <= 0.48 ? 'visible' : 'hidden',
-          }}
-        >
-          <SectionTransform />
-        </div>
-
-        {/* ACT III: THE DEEP SECTOR (Active 0.46 -> 0.70) */}
-        <div
-          className="absolute inset-0 transition-all duration-300 pointer-events-none"
-          style={{
-            opacity: p >= 0.44 && p <= 0.68 ? Math.min((p - 0.44) * 10, 1) * Math.min((0.68 - p) * 10, 1) : 0,
-            transform: `scale(${p >= 0.44 && p <= 0.68 ? 1.15 - ((p - 0.44) / 0.24) * 0.15 : 1.15}) translateY(${p < 0.50 ? (0.50 - p) * 80 : 0}px)`,
-            visibility: p >= 0.42 && p <= 0.72 ? 'visible' : 'hidden',
-          }}
-        >
-          <SectionImmersion />
-        </div>
-
-        {/* ACT IV: THE TRIAD OF RELICS (Active 0.70 -> 0.90) */}
-        <div
-          className="absolute inset-0 transition-all duration-300 pointer-events-none"
-          style={{
-            opacity: p >= 0.68 && p <= 0.88 ? Math.min((p - 0.68) * 10, 1) * Math.min((0.88 - p) * 10, 1) : 0,
-            transform: `translateY(${p < 0.74 ? (0.74 - p) * 120 : p > 0.85 ? (p - 0.85) * -100 : 0}px)`,
-            visibility: p >= 0.66 && p <= 0.91 ? 'visible' : 'hidden',
-          }}
-        >
-          <SectionInteractive
-            selectedArtifact={selectedArtifact}
-            onSelectArtifact={setSelectedArtifact}
-          />
-        </div>
-
-        {/* ACT V: THE HORIZON (Active 0.90 -> 1.00) */}
-        <div
-          className="absolute inset-0 transition-all duration-300 pointer-events-none"
-          style={{
-            opacity: p >= 0.88 ? Math.min((p - 0.88) * 12, 1) : 0,
-            transform: `scale(${p >= 0.88 ? 0.92 + ((p - 0.88) / 0.12) * 0.08 : 0.92})`,
-            letterSpacing: p >= 0.88 ? `${(p - 0.88) * 0.05}em` : '0em',
-            visibility: p >= 0.86 ? 'visible' : 'hidden',
-          }}
-        >
-          <SectionFinal
-            onToggleFreeFly={() => setIsFreeFly(!isFreeFly)}
-            onRestart={handleRestart}
-          />
-        </div>
-      </div>
-
-      {/* =========================================================================
-          PHYSICAL SCROLL TRACK DRIVEN BY GSAP SCROLLTRIGGER (500vh)
-          Permits smooth, native mousewheel and touch scroll across all devices
-          ========================================================================= */}
-      <div
-        ref={scrollTrackRef}
-        className="relative w-full h-[500vh] pointer-events-none"
-        aria-hidden="true"
-      />
+        {/* 09. CONTACT — The Final Frame & Minimal Footer */}
+        <Contact />
+      </main>
     </div>
   );
 }
