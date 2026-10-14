@@ -1,49 +1,38 @@
-import { Layers, Globe, Compass } from 'lucide-react';
+import { Compass } from 'lucide-react';
 
 export function SectionImmersion() {
   return (
-    <section className="relative min-h-screen flex items-center px-6 py-24 pointer-events-none">
-      <div className="max-w-6xl mx-auto w-full">
-        <div className="max-w-2xl space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-violet/10 border border-neon-violet/30 text-neon-violet font-mono text-xs tracking-widest uppercase">
-            <span>CHAPTER 03 // IMMERSION</span>
+    <section className="relative min-h-screen flex items-center px-6 sm:px-12 py-24 pointer-events-none select-none">
+      <div className="max-w-7xl mx-auto w-full">
+        <div className="max-w-3xl space-y-6">
+          <div className="flex items-center gap-2 font-mono text-xs text-neon-violet tracking-[0.25em] uppercase">
+            <Compass className="w-3.5 h-3.5 text-neon-violet animate-pulse" />
+            <span>// ACT III : THE DEEP SECTOR</span>
           </div>
 
-          <h2 className="font-display font-extrabold text-4xl sm:text-6xl text-white tracking-tight leading-[1.05]">
+          <h2 className="font-display font-extrabold text-5xl sm:text-7xl lg:text-8xl text-white tracking-tighter leading-[0.92]">
             BEYOND CLASSICAL <br />
             <span className="bg-gradient-to-r from-neon-cyan via-electric-blue to-neon-violet bg-clip-text text-transparent">
               REALITY.
             </span>
           </h2>
 
-          <p className="font-sans text-base sm:text-lg text-gray-300 font-light leading-relaxed">
-            Step outside the Euclidean grid. A synthesis of physical presence, deep cosmic perspective, and ethereal intelligence. The floating obsidian monoliths anchor the gravimetric fields of this cybernetic void.
+          <p className="font-sans text-lg sm:text-xl text-gray-300 font-light leading-relaxed max-w-2xl">
+            Step outside the Euclidean grid. Floating monolithic obelisks anchor the gravimetric fields of this cybernetic sanctuary. Light streams and thousands of cosmic particles accelerate with camera velocity, warping perception into deep space.
           </p>
 
-          {/* Feature Matrix Pillars */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 pointer-events-auto">
-            <div className="bg-[#0c0c14]/80 backdrop-blur-md p-4 rounded-xl border border-white/10 hover:border-neon-cyan/40 transition-all">
-              <Layers className="w-5 h-5 text-neon-cyan mb-2" />
-              <div className="font-mono text-xs font-bold text-white mb-1">MONOLITH PROTOCOL</div>
-              <p className="text-[11px] text-gray-400 font-sans leading-relaxed">
-                Reflective obsidian pillars acting as quantum stabilizers across parallel vectors.
-              </p>
+          <div className="pt-6 flex flex-wrap items-center gap-10 font-mono text-xs text-gray-400 border-t border-white/10">
+            <div>
+              <span className="text-[10px] text-gray-500 uppercase tracking-widest block">GRAVIMETRIC INDEX</span>
+              <span className="text-white font-bold text-sm">ZERO-G // 0.00m/s²</span>
             </div>
-
-            <div className="bg-[#0c0c14]/80 backdrop-blur-md p-4 rounded-xl border border-white/10 hover:border-neon-violet/40 transition-all">
-              <Globe className="w-5 h-5 text-neon-violet mb-2" />
-              <div className="font-mono text-xs font-bold text-white mb-1">COSMIC STREAM</div>
-              <p className="text-[11px] text-gray-400 font-sans leading-relaxed">
-                2,400 procedural light particles drifting seamlessly with camera velocity.
-              </p>
+            <div>
+              <span className="text-[10px] text-gray-500 uppercase tracking-widest block">DEPTH COORDINATES</span>
+              <span className="text-neon-violet font-bold text-sm">-11.00m to -38.00m</span>
             </div>
-
-            <div className="bg-[#0c0c14]/80 backdrop-blur-md p-4 rounded-xl border border-white/10 hover:border-emerald-400/40 transition-all">
-              <Compass className="w-5 h-5 text-emerald-400 mb-2" />
-              <div className="font-mono text-xs font-bold text-white mb-1">ZERO-G KINEMATICS</div>
-              <p className="text-[11px] text-gray-400 font-sans leading-relaxed">
-                Atmospheric fog and volumetric depth calculations simulating boundless space.
-              </p>
+            <div>
+              <span className="text-[10px] text-gray-500 uppercase tracking-widest block">ATMOSPHERE</span>
+              <span className="text-white font-bold text-sm">DEEP OBSIDIAN FOG</span>
             </div>
           </div>
         </div>

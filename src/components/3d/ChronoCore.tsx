@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { ContactShadows, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import { sound } from '../../utils/sound';
 
@@ -11,193 +12,304 @@ interface ChronoCoreProps {
 
 export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCoreProps) {
   const groupRef = useRef<THREE.Group>(null);
-  const ring1Ref = useRef<THREE.Mesh>(null);
-  const ring2Ref = useRef<THREE.Mesh>(null);
-  const ring3Ref = useRef<THREE.Mesh>(null);
-  const ring4Ref = useRef<THREE.Mesh>(null);
+  const ring1Ref = useRef<THREE.Group>(null);
+  const ring2Ref = useRef<THREE.Group>(null);
+  const ring3Ref = useRef<THREE.Group>(null);
+  const ring4Ref = useRef<THREE.Group>(null);
   const coreRef = useRef<THREE.Mesh>(null);
-  const innerEnergyRef = useRef<THREE.Mesh>(null);
+  const coreInnerRef = useRef<THREE.Mesh>(null);
   const shockwaveRef = useRef<THREE.Mesh>(null);
+  const datumRingRef = useRef<THREE.Mesh>(null);
 
   const [hovered, setHovered] = useState(false);
   const [shockwaveScale, setShockwaveScale] = useState(0);
-  const [pulseIntensity, setPulseIntensity] = useState(1);
+  const [energyPulse, setEnergyPulse] = useState(1);
 
-  // Click interaction: Trigger dramatic resonance reaction
+  // Velocity vectors for physical inertia
+  const targetRotation = useRef({ x: 0, y: 0 });
+
   const handleClick = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
     sound.playResonancePulse();
     setShockwaveScale(0.1);
-    setPulseIntensity(4.0);
+    setEnergyPulse(3.8);
     if (onInteract) onInteract();
   };
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
 
-    // Smooth idle rotation + pointer responsiveness
-    const targetRotX = pointer.y * 0.4 + (Math.sin(Date.now() * 0.0006) * 0.1);
-    const targetRotY = pointer.x * 0.5 + (Date.now() * 0.0003);
+    // Physical spring inertia on pointer movement
+    targetRotation.current.x = pointer.y * 0.45 + Math.sin(Date.now() * 0.0008) * 0.08;
+    targetRotation.current.y = pointer.x * 0.6 + (Date.now() * 0.0004);
 
-    groupRef.current.rotation.x = THREE.MathUtils.damp(groupRef.current.rotation.x, targetRotX, 3.5, delta);
-    groupRef.current.rotation.y = THREE.MathUtils.damp(groupRef.current.rotation.y, targetRotY, 3.5, delta);
+    groupRef.current.rotation.x = THREE.MathUtils.damp(
+      groupRef.current.rotation.x,
+      targetRotation.current.x,
+      2.8,
+      delta
+    );
+    groupRef.current.rotation.y = THREE.MathUtils.damp(
+      groupRef.current.rotation.y,
+      targetRotation.current.y,
+      2.8,
+      delta
+    );
 
-    // Section 2 Transformation: Rings expand outward as scroll increases (0.0 to 0.4)
-    const transformFactor = Math.min(Math.max((scrollProgress - 0.05) / 0.35, 0), 1);
+    // Section 2 Transformation Factor (0.05 to 0.45)
+    const transformFactor = Math.min(Math.max((scrollProgress - 0.05) / 0.38, 0), 1);
+    const speedMultiplier = hovered ? 2.4 : 1.0;
 
-    // Differential counter-rotations
-    const hoverSpeed = hovered ? 2.2 : 1.0;
+    // Ring 1: Primary Heavy Titanium Gimbal
     if (ring1Ref.current) {
-      ring1Ref.current.rotation.z += delta * 0.35 * hoverSpeed;
-      ring1Ref.current.position.z = THREE.MathUtils.lerp(0, 1.4, transformFactor);
+      ring1Ref.current.rotation.z += delta * 0.32 * speedMultiplier;
+      ring1Ref.current.position.z = THREE.MathUtils.lerp(0, 1.8, transformFactor);
     }
+
+    // Ring 2: Chrome Gyro Ring
     if (ring2Ref.current) {
-      ring2Ref.current.rotation.x += delta * 0.45 * hoverSpeed;
-      ring2Ref.current.rotation.y += delta * 0.25 * hoverSpeed;
-      ring2Ref.current.position.z = THREE.MathUtils.lerp(0, -1.4, transformFactor);
+      ring2Ref.current.rotation.x += delta * 0.42 * speedMultiplier;
+      ring2Ref.current.rotation.y += delta * 0.22 * speedMultiplier;
+      ring2Ref.current.position.z = THREE.MathUtils.lerp(0, -1.8, transformFactor);
     }
+
+    // Ring 3: Segmented Iris Ring
     if (ring3Ref.current) {
-      ring3Ref.current.rotation.y -= delta * 0.4 * hoverSpeed;
-      ring3Ref.current.scale.setScalar(THREE.MathUtils.lerp(1, 1.35, transformFactor));
+      ring3Ref.current.rotation.y -= delta * 0.38 * speedMultiplier;
+      ring3Ref.current.scale.setScalar(THREE.MathUtils.lerp(1, 1.45, transformFactor));
     }
+
+    // Ring 4: Luminous Laser Conduit Ring
     if (ring4Ref.current) {
-      ring4Ref.current.rotation.z -= delta * 0.5 * hoverSpeed;
-      ring4Ref.current.rotation.x += delta * 0.3 * hoverSpeed;
+      ring4Ref.current.rotation.z -= delta * 0.55 * speedMultiplier;
+      ring4Ref.current.rotation.x += delta * 0.28 * speedMultiplier;
     }
 
-    // Inner glowing core pulse
-    if (coreRef.current) {
-      coreRef.current.rotation.y += delta * 0.6;
-      coreRef.current.rotation.x += delta * 0.4;
-      const scale = 1 + Math.sin(Date.now() * 0.003) * 0.06;
+    // Central Core Floating Oscillation & Breathing
+    if (coreRef.current && coreInnerRef.current) {
+      coreRef.current.rotation.y += delta * 0.7;
+      coreRef.current.rotation.x += delta * 0.5;
+
+      const scale = 1 + Math.sin(Date.now() * 0.0035) * 0.06;
       coreRef.current.scale.set(scale, scale, scale);
+      coreInnerRef.current.rotation.y -= delta * 0.9;
     }
 
-    // Pulse decay back to normal
-    if (pulseIntensity > 1) {
-      setPulseIntensity(THREE.MathUtils.damp(pulseIntensity, 1, 3, delta));
+    // Datum pedestal ring slow rotation
+    if (datumRingRef.current) {
+      datumRingRef.current.rotation.z += delta * 0.08;
     }
 
-    // Animate shockwave on click
+    // Energy pulse decay
+    if (energyPulse > 1) {
+      setEnergyPulse(THREE.MathUtils.damp(energyPulse, 1, 3.2, delta));
+    }
+
+    // Expanding shockwave ring on click
     if (shockwaveScale > 0) {
-      const nextScale = shockwaveScale + delta * 8.5;
-      if (nextScale > 7.5) {
+      const next = shockwaveScale + delta * 9.5;
+      if (next > 8.5) {
         setShockwaveScale(0);
       } else {
-        setShockwaveScale(nextScale);
+        setShockwaveScale(next);
       }
       if (shockwaveRef.current) {
-        shockwaveRef.current.scale.set(nextScale, nextScale, nextScale);
+        shockwaveRef.current.scale.set(next, next, next);
         const mat = shockwaveRef.current.material as THREE.MeshBasicMaterial;
-        mat.opacity = Math.max(0, 1 - nextScale / 7.5);
+        mat.opacity = Math.max(0, 1 - next / 8.5);
       }
     }
   });
 
   return (
-    <group ref={groupRef} position={[0, 0, 0]}>
-      {/* Shockwave Ring on Click */}
-      {shockwaveScale > 0 && (
-        <mesh ref={shockwaveRef} rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[0.9, 1.05, 64]} />
-          <meshBasicMaterial
-            color="#00f0ff"
-            transparent
-            opacity={0.8}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-      )}
-
-      {/* Interactive Raycast Hitbox */}
+    <group position={[0, 0, 0]}>
+      {/* Ground Pedestal Datum Ring anchoring the sculpture physically */}
       <mesh
-        visible={false}
-        onClick={handleClick}
-        onPointerOver={() => {
-          setHovered(true);
-          sound.playHover();
-          document.body.style.cursor = 'pointer';
-        }}
-        onPointerOut={() => {
-          setHovered(false);
-          document.body.style.cursor = 'default';
-        }}
+        ref={datumRingRef}
+        position={[0, -2.5, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
       >
-        <sphereGeometry args={[2.8, 16, 16]} />
-      </mesh>
-
-      {/* Central Quantum Core: Multi-faceted Chrome Icosahedron */}
-      <mesh ref={coreRef} onClick={handleClick}>
-        <icosahedronGeometry args={[1.1, 1]} />
-        <meshStandardMaterial
-          color="#f8fafc"
-          metalness={0.96}
-          roughness={0.08}
-          envMapIntensity={2.5}
-        />
-      </mesh>
-
-      {/* Inner Radiant Energy Orb inside Core */}
-      <mesh ref={innerEnergyRef}>
-        <sphereGeometry args={[0.65, 32, 32]} />
-        <meshStandardMaterial
-          color="#00f0ff"
-          emissive="#00f0ff"
-          emissiveIntensity={3.5 * pulseIntensity}
-          toneMapped={false}
-        />
-      </mesh>
-
-      {/* Ring 1: Primary Outer Chrome Gyro Ring */}
-      <mesh ref={ring1Ref}>
-        <torusGeometry args={[2.3, 0.08, 24, 100]} />
-        <meshStandardMaterial
-          color="#e2e8f0"
-          metalness={0.95}
-          roughness={0.12}
-        />
-      </mesh>
-
-      {/* Ring 2: Concentric Angular Mechanical Ring */}
-      <mesh ref={ring2Ref} rotation={[Math.PI / 3, 0, 0]}>
-        <torusGeometry args={[1.9, 0.065, 16, 80]} />
-        <meshStandardMaterial
-          color="#94a3b8"
-          metalness={0.98}
-          roughness={0.18}
-        />
-      </mesh>
-
-      {/* Ring 3: Slotted Tech Collar */}
-      <mesh ref={ring3Ref} rotation={[0, Math.PI / 4, Math.PI / 4]}>
-        <torusGeometry args={[1.5, 0.05, 16, 60]} />
-        <meshStandardMaterial
-          color="#cbd5e1"
-          metalness={0.92}
-          roughness={0.14}
-        />
-      </mesh>
-
-      {/* Ring 4: Inner Luminous Cyan Orbital Guide */}
-      <mesh ref={ring4Ref} rotation={[Math.PI / 2, Math.PI / 6, 0]}>
-        <torusGeometry args={[2.55, 0.02, 12, 120]} />
+        <ringGeometry args={[2.2, 2.24, 64]} />
         <meshBasicMaterial
           color="#00f0ff"
           transparent
-          opacity={hovered ? 0.95 : 0.65}
+          opacity={0.35}
+          side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* Floating Orbital Satellites / Nodes */}
-      <group rotation={[0.4, 0.6, 0]}>
-        <mesh position={[2.7, 0, 0]}>
-          <octahedronGeometry args={[0.16, 0]} />
-          <meshStandardMaterial color="#8a2be2" emissive="#8a2be2" emissiveIntensity={2} />
+      {/* Secondary Concentric Datum Ring */}
+      <mesh position={[0, -2.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[3.2, 3.22, 64]} />
+        <meshBasicMaterial
+          color="#8a2be2"
+          transparent
+          opacity={0.25}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* High-Resolution Contact Shadow Anchoring the Object */}
+      <ContactShadows
+        position={[0, -2.55, 0]}
+        opacity={0.75}
+        scale={14}
+        blur={2.4}
+        far={6}
+        resolution={512}
+        color="#00f0ff"
+      />
+
+      {/* Main Interactive Floating Mechanical Sculpture */}
+      <group ref={groupRef}>
+        {/* Click Shockwave Ring */}
+        {shockwaveScale > 0 && (
+          <mesh ref={shockwaveRef} rotation={[Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[0.9, 1.05, 64]} />
+            <meshBasicMaterial
+              color="#00f0ff"
+              transparent
+              opacity={0.9}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+        )}
+
+        {/* Raycasting Hover & Click Hitbox */}
+        <mesh
+          visible={false}
+          onClick={handleClick}
+          onPointerOver={() => {
+            setHovered(true);
+            sound.playHover();
+            document.body.style.cursor = 'pointer';
+          }}
+          onPointerOut={() => {
+            setHovered(false);
+            document.body.style.cursor = 'default';
+          }}
+        >
+          <sphereGeometry args={[2.9, 16, 16]} />
         </mesh>
-        <mesh position={[-2.7, 0, 0]}>
-          <octahedronGeometry args={[0.16, 0]} />
-          <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={2} />
+
+        {/* 1. Outer Heavy Titanium Gimbal Ring */}
+        <group ref={ring1Ref}>
+          <mesh onClick={handleClick}>
+            <torusGeometry args={[2.35, 0.09, 32, 120]} />
+            <meshPhysicalMaterial
+              color="#e2e8f0"
+              metalness={0.96}
+              roughness={0.12}
+              clearcoat={1.0}
+              clearcoatRoughness={0.06}
+              reflectivity={1.0}
+              envMapIntensity={3.2}
+            />
+          </mesh>
+          {/* Micro-bolts & Detail Lugs on Ring 1 */}
+          {[0, Math.PI / 2, Math.PI, (Math.PI * 3) / 2].map((angle, i) => (
+            <mesh
+              key={i}
+              position={[Math.cos(angle) * 2.35, Math.sin(angle) * 2.35, 0]}
+            >
+              <cylinderGeometry args={[0.07, 0.07, 0.22, 12]} />
+              <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={0.8} />
+            </mesh>
+          ))}
+        </group>
+
+        {/* 2. Chrome Mirror Gyro Ring */}
+        <group ref={ring2Ref} rotation={[Math.PI / 3, 0, 0]}>
+          <mesh onClick={handleClick}>
+            <torusGeometry args={[1.92, 0.075, 24, 100]} />
+            <meshPhysicalMaterial
+              color="#f8fafc"
+              metalness={0.99}
+              roughness={0.05}
+              clearcoat={1.0}
+              clearcoatRoughness={0.04}
+              iridescence={0.7}
+              iridescenceIOR={1.3}
+              iridescenceThicknessRange={[100, 380]}
+              envMapIntensity={3.5}
+            />
+          </mesh>
+        </group>
+
+        {/* 3. High-Precision Segmented Iris Ring */}
+        <group ref={ring3Ref} rotation={[0, Math.PI / 4, Math.PI / 4]}>
+          <mesh onClick={handleClick}>
+            <torusGeometry args={[1.52, 0.06, 20, 80]} />
+            <meshPhysicalMaterial
+              color="#94a3b8"
+              metalness={0.92}
+              roughness={0.16}
+              clearcoat={0.8}
+              envMapIntensity={2.6}
+            />
+          </mesh>
+        </group>
+
+        {/* 4. Inner Luminous Cyan Energy Ring */}
+        <group ref={ring4Ref} rotation={[Math.PI / 2, Math.PI / 6, 0]}>
+          <mesh>
+            <torusGeometry args={[2.58, 0.025, 16, 120]} />
+            <meshBasicMaterial
+              color="#00f0ff"
+              transparent
+              opacity={hovered ? 0.95 : 0.65}
+            />
+          </mesh>
+        </group>
+
+        {/* 5. Central Quantum Core: Multi-Faceted Faceted Stellation Frame */}
+        <mesh ref={coreRef} onClick={handleClick}>
+          <icosahedronGeometry args={[1.12, 1]} />
+          <meshPhysicalMaterial
+            color="#ffffff"
+            metalness={0.98}
+            roughness={0.06}
+            clearcoat={1.0}
+            clearcoatRoughness={0.02}
+            iridescence={0.85}
+            iridescenceIOR={1.4}
+            iridescenceThicknessRange={[120, 420]}
+            envMapIntensity={3.8}
+          />
         </mesh>
+
+        {/* 6. Inner Glowing Energy Core with Quantum Sparkles */}
+        <mesh ref={coreInnerRef}>
+          <octahedronGeometry args={[0.72, 0]} />
+          <meshStandardMaterial
+            color="#00f0ff"
+            emissive="#00f0ff"
+            emissiveIntensity={3.2 * energyPulse}
+            toneMapped={false}
+          />
+        </mesh>
+
+        {/* Quantum Energy Sparks Swirling around the Core */}
+        <Sparkles
+          count={75}
+          scale={5.5}
+          size={4.2}
+          speed={hovered ? 1.2 : 0.4}
+          color="#00f0ff"
+          opacity={0.85}
+        />
+
+        {/* Counter-Spinning Violet Magnetic Nodes */}
+        <group rotation={[0.45, 0.6, 0]}>
+          <mesh position={[2.75, 0, 0]}>
+            <octahedronGeometry args={[0.18, 0]} />
+            <meshStandardMaterial color="#8a2be2" emissive="#8a2be2" emissiveIntensity={3} />
+          </mesh>
+          <mesh position={[-2.75, 0, 0]}>
+            <octahedronGeometry args={[0.18, 0]} />
+            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={3} />
+          </mesh>
+        </group>
       </group>
     </group>
   );

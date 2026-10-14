@@ -19,6 +19,7 @@ export default function App() {
   const { progress, activeSection } = useScrollProgress();
   const [selectedArtifact, setSelectedArtifact] = useState<ArtifactData | null>(null);
   const [isFreeFly, setIsFreeFly] = useState<boolean>(false);
+  const [isCinemaBars, setIsCinemaBars] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +56,20 @@ export default function App() {
       <div className="film-grain" aria-hidden="true" />
       <div className="scanlines" aria-hidden="true" />
 
+      {/* Optional 2.39:1 Anamorphic Cinema Letterbox Bars */}
+      {isCinemaBars && (
+        <>
+          <div className="fixed top-0 left-0 right-0 h-10 sm:h-14 bg-black z-50 pointer-events-none border-b border-white/5 flex items-center justify-between px-8 text-[9px] font-mono text-gray-500 uppercase tracking-widest">
+            <span>ARRI ALEXA 65 // 2.39:1 ANAMORPHIC</span>
+            <span>SHUTTER: 180° // T1.5 // COLOR: ACEScc</span>
+          </div>
+          <div className="fixed bottom-0 left-0 right-0 h-10 sm:h-14 bg-black z-50 pointer-events-none border-t border-white/5 flex items-center justify-between px-8 text-[9px] font-mono text-gray-500 uppercase tracking-widest">
+            <span>SCENE // REAL-TIME WEBGL</span>
+            <span>TIMECODE // 00:04:18:22</span>
+          </div>
+        </>
+      )}
+
       {/* Persistent 3D WebGL Scene */}
       <Scene
         scrollProgress={progress}
@@ -67,7 +82,9 @@ export default function App() {
       <Navigation
         activeSection={activeSection}
         isFreeFly={isFreeFly}
+        isCinemaBars={isCinemaBars}
         onToggleFreeFly={() => setIsFreeFly(!isFreeFly)}
+        onToggleCinemaBars={() => setIsCinemaBars(!isCinemaBars)}
         onNavigateToSection={handleNavigateToSection}
       />
 

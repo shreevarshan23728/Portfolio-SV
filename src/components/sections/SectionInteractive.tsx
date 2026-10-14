@@ -1,6 +1,6 @@
 import type { ArtifactData } from '../../types';
 import { ARTIFACTS } from '../3d/InteractiveArtifacts';
-import { Eye, Zap } from 'lucide-react';
+import { Eye, Radio, Sparkles } from 'lucide-react';
 import { sound } from '../../utils/sound';
 
 interface SectionInteractiveProps {
@@ -10,73 +10,64 @@ interface SectionInteractiveProps {
 
 export function SectionInteractive({ selectedArtifact, onSelectArtifact }: SectionInteractiveProps) {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-6 py-24 pointer-events-none">
-      <div className="max-w-6xl mx-auto w-full">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan font-mono text-xs tracking-widest uppercase">
-            <span>CHAPTER 04 // INTERACTION</span>
+    <section className="relative min-h-screen flex flex-col justify-center px-6 sm:px-12 py-24 pointer-events-none select-none">
+      <div className="max-w-7xl mx-auto w-full">
+        {/* Cinematic Header */}
+        <div className="max-w-2xl mb-12 space-y-4">
+          <div className="flex items-center gap-2 font-mono text-xs text-neon-cyan tracking-[0.25em] uppercase">
+            <Radio className="w-3.5 h-3.5 text-neon-cyan animate-pulse" />
+            <span>// ACT IV : QUANTUM SPECIMENS</span>
           </div>
 
-          <h2 className="font-display font-extrabold text-4xl sm:text-6xl text-white tracking-tight leading-[1.05]">
+          <h2 className="font-display font-extrabold text-5xl sm:text-7xl text-white tracking-tighter leading-[0.95]">
             THE TRIAD OF RELICS.
           </h2>
 
           <p className="font-sans text-base sm:text-lg text-gray-300 font-light leading-relaxed">
-            Three quantum artifacts floating in synchronized formation. Click an object directly in 3D space or select below to command the camera and initiate inspection.
+            Three hyper-structures suspended in zero-entropy vacuum. Click any artifact in 3D space or activate below to lock the camera and inspect its telemetry.
           </p>
         </div>
 
-        {/* Interactive Relic Selector Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pointer-events-auto max-w-5xl mx-auto">
-          {ARTIFACTS.map((artifact) => {
+        {/* Sophisticated Tactical Selector Rail (No generic template cards) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pointer-events-auto max-w-5xl">
+          {ARTIFACTS.map((artifact, i) => {
             const isSelected = selectedArtifact?.id === artifact.id;
             return (
               <div
                 key={artifact.id}
                 onClick={() => {
-                  sound.playChime(700, 0.4);
+                  sound.playChime(700 + i * 80, 0.4);
                   onSelectArtifact(artifact);
                 }}
-                className={`group relative bg-[#0c0c14]/85 backdrop-blur-xl rounded-2xl p-6 border transition-all cursor-pointer transform hover:-translate-y-1.5 shadow-xl ${
+                className={`relative p-5 rounded-xl border backdrop-blur-xl transition-all cursor-pointer group ${
                   isSelected
-                    ? 'border-neon-cyan shadow-[0_0_30px_rgba(0,240,255,0.25)]'
-                    : 'border-white/10 hover:border-white/30'
+                    ? 'bg-[#0f111e]/90 border-neon-cyan shadow-[0_0_35px_rgba(0,240,255,0.25)]'
+                    : 'bg-[#080910]/70 border-white/10 hover:border-white/30 hover:bg-[#0c0d18]'
                 }`}
               >
-                {/* Glow bar */}
-                <div
-                  className="absolute top-0 left-6 right-6 h-0.5 rounded-full"
-                  style={{ backgroundColor: artifact.color }}
-                />
-
-                <div className="flex items-center justify-between text-xs font-mono text-gray-400 mb-3">
-                  <span>{artifact.code}</span>
+                <div className="flex items-center justify-between font-mono text-[10px] text-gray-400 mb-2">
+                  <span>0{i + 1} // {artifact.code}</span>
                   <span
-                    className="text-[10px] font-bold px-2 py-0.5 rounded"
+                    className="font-bold px-1.5 py-0.5 rounded"
                     style={{ backgroundColor: `${artifact.color}15`, color: artifact.color }}
                   >
                     {artifact.classification}
                   </span>
                 </div>
 
-                <h3 className="text-xl font-display font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                <h3 className="font-display font-bold text-lg text-white mb-1.5 group-hover:text-neon-cyan transition-colors">
                   {artifact.name}
                 </h3>
 
-                <p className="text-xs text-gray-400 font-sans leading-relaxed line-clamp-3 mb-5">
-                  {artifact.description}
-                </p>
-
-                <div className="flex items-center justify-between pt-3 border-t border-white/5 font-mono text-xs">
+                <div className="flex items-center justify-between text-xs font-mono pt-3 border-t border-white/5">
                   <span className="text-gray-400 flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5" style={{ color: artifact.color }} />
+                    <Sparkles className="w-3 h-3" style={{ color: artifact.color }} />
                     <span className="text-white font-bold">{artifact.coherence}</span>
                   </span>
 
-                  <span className="flex items-center gap-1 text-neon-cyan font-bold group-hover:translate-x-1 transition-transform">
+                  <span className="text-neon-cyan font-bold flex items-center gap-1 text-[11px] group-hover:translate-x-0.5 transition-transform">
                     <Eye className="w-3.5 h-3.5" />
-                    <span>INSPECT</span>
+                    <span>INSPECT 3D</span>
                   </span>
                 </div>
               </div>
