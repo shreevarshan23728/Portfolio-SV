@@ -1,105 +1,95 @@
-# Shree Varshan P - Developer Portfolio Website
+# ENTER ANOTHER DIMENSION // 3D WebGL Odyssey
 
-A vibrant, colorful, and recruiter-ready personal portfolio website built for **Shree Varshan P**, Software Student in **Artificial Intelligence and Data Science (AI&DS)** at **Rathinam College, Coimbatore**.
-
----
-
-## 🎨 Visual Aesthetics & Palette
-
-- **Base Canvas:** Clean, crisp light background with generous whitespace.
-- **Vibrant Accent Palette:** Electric Blue (`#0066ff`), Coral (`#ff5252`), and Warm Yellow (`#f59e0b`).
-- **Playful Geometric Shapes:** Floating CSS & SVG geometric shapes (dashed rings, pills, 4-point stars, diamonds, dot matrices) with smooth, lightweight keyframe animations.
-- **Bold Modern Typography:** Headings in Google Fonts **Outfit** and body text in **Plus Jakarta Sans**, with monospaced badges in **JetBrains Mono**.
-- **Dark Mode Support:** Optional seamless theme toggle switch in the navigation bar.
+An extraordinary, cinematic, and interactive 3D WebGL website engineered with **React**, **TypeScript**, **Three.js**, **React Three Fiber**, **Drei**, and **Tailwind CSS**. Built to feel like a high-end digital art installation and award-winning Awwwards interactive experience.
 
 ---
 
-## 📋 Required Sections & Content Breakdown
+## 🌌 Visual Direction & Philosophy
 
-1. **Hero Section (`#hero`):**
-   - Title: *"Hi, I’m Shree Varshan"*
-   - Concise introduction as an AI&DS software student at Rathinam College, Coimbatore.
-   - Prominent call-to-action buttons: **"View My Work"** and **"Contact Me"**.
-   - Direct verified phone pill (`9994819939`) with one-click copy and call action.
-   - Interactive profile identity card featuring geometric badge accents and student details.
+- **Atmosphere:** Deep obsidian space (`#030305`) enveloped in exponential atmospheric fog.
+- **Surfaces:** Ultra-reflective metallic chrome and polished silver materials featuring Physically Based Rendering (PBR with clearcoat, roughness damping, and metallic envMap reflection).
+- **Lighting:** Dynamic orbiting electric blue (`#00f0ff`) and neon violet (`#8a2be2`) point lights paired with sharp directional chrome key lights and volumetric rim lighting.
+- **Typography:** Oversized editorial display typography using **Syne** and **Space Grotesk**, accented by restrained **JetBrains Mono** for technical telemetry HUDs and coordinates.
+- **Audio Synthesizer:** Real-time Web Audio API ambient spatial synthesizer generating deep sub-bass cosmic drones, resonant harmonic pulses, and chimes with zero external audio assets.
 
-2. **About Section (`#about`):**
-   - Short, friendly narrative focused on **continuous learning**, **structured problem-solving**, and **building useful technology**.
-   - Three dedicated visual pillar cards explaining Shree's engineering mindset.
+---
 
-3. **Education Section (`#education`):**
-   - **Institution:** Rathinam College, Coimbatore, Tamil Nadu, India.
-   - **Department:** Artificial Intelligence and Data Science (AI&DS).
-   - **Placeholders:** Degree (e.g. B.Tech / B.E. / B.Sc) and Expected Graduation Year (e.g. 2026).
-   - Core curriculum focus badges.
+## 🧭 Multi-Section Scroll Storytelling (5 Chapters)
 
-4. **Skills Section (`#skills`):**
-   - 4 attractive, categorized skill cards:
-     1. Programming Languages
-     2. Frameworks & Web Tech
-     3. Developer Tools & Databases
-     4. AI & Core Foundations
-   - **Honest & Genuine:** Clearly marked editable placeholders (`[Programming Language 1]`, `[Framework 1]`, etc.) with amber tags so no skills are fabricated.
+### 01 // ORIGIN (Hero Introduction)
+- Colossal, intricate abstract mechanical sculpture (**The Chrono-Core**) floating in darkness.
+- Concentric metallic gyro-rings rotating around an energetic quantum crystal core.
+- Subtle pointer parallax tilting and idle gyroscopic rotations.
+- **Interactions:**
+  - Click the core directly or click *"PULSE ARTIFACT CORE"* to trigger an expanding radial shockwave, resonance pulse, and synthesizer feedback.
+  - Hover over the core to accelerate rotational kinetic energy.
 
-5. **Projects Section (`#projects`):**
-   - 3 structured project cards:
-     - Project 01: Full-Stack Web Application placeholder
-     - Project 02: AI / Machine Learning Application placeholder
-     - Project 03: Software Utility / Automation Tool placeholder
-   - Clearly marked placeholders for project title, 2-3 sentence overview, key features, tech stack chips, and GitHub / Live Demo links.
+### 02 // RECONFIGURATION (Transformation)
+- As the user scrolls, the camera sweeps along a 3D spline trajectory around the sculpture.
+- The concentric mechanical rings expand outward in 3D space (`z` and `radius`), exposing the internal quantum energy conduits.
+- Technical telemetry panels display live expansion ratios ($1.618\phi$), gimbal synchronicity, and PBR roughness metrics.
 
-6. **Contact Section (`#contact`):**
-   - **Verified Phone:** `9994819939` (Call Now button, Copy button)
-   - **Location:** Coimbatore, India (Rathinam College)
-   - **Placeholders:**
-     - Email: `[your.email@example.com]`
-     - LinkedIn: `[linkedin.com/in/your-profile]`
-     - GitHub: `[github.com/your-username]`
-   - Direct recruiter callout banner.
+### 03 // DEEP SPACE (Immersion)
+- Camera dives deeper past the core into a monumental sanctuary of floating obsidian monoliths and obelisks.
+- Thousands of procedural particles stream forward through deep space coordinates with scroll-velocity acceleration.
+- Atmospheric horizon ribbons and volumetric zero-gravity kinematics.
+
+### 04 // THE TRIAD OF RELICS (Interactive Showcase)
+- Camera transitions before three distinct floating 3D artifacts:
+  1. **THE CHRONO RELIC (Temporal Flux Core):** Polished chrome dodecahedron with rotating time-dilation rings.
+  2. **NEURAL MONOLITH (Synaptic Cortex):** Deep obsidian geodesic sphere with glowing purple wireframe synaptic dendrites.
+  3. **QUANTUM PRISM (Refractive Singularity):** Iridescent silver and emerald octahedron that refracts light into multi-dimensional spectra.
+- **Selection Interaction:**
+  - Click any 3D artifact directly in the canvas or click its HUD card below.
+  - The 3D camera smoothly glides and zooms into that specific artifact.
+  - Opens a detailed holographic inspection HUD with live frequency, coherence ratio, flux density, and interactive quantum tuning sliders.
+
+### 05 // THE HORIZON (Cinematic Conclusion)
+- Monumental closing statement: *"THE LIMIT IS YOUR IMAGINATION. The future is not something you enter. It is something you build."*
+- **Action Triggers:**
+  - **ENTER 3D FREE-FLY MODE:** Unlocks 360° `OrbitControls` so visitors can freely navigate, pan, and zoom around all 3D geometries in the scene.
+  - **RESTART SEQUENCE:** Smoothly rolls back to the beginning.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework:** React 19 + TypeScript
+- **Bundler:** Vite
+- **Styling:** Tailwind CSS + Custom CSS Scanlines, Film Grain, and Glassmorphic HUD Panels
+- **3D Engine:** Three.js + `@react-three/fiber` + `@react-three/drei`
+- **Audio:** Native Web Audio API Synthesizer (Zero asset dependencies)
+- **Icons:** Lucide React
 
 ---
 
 ## 🚀 How to Run Locally
 
-### Option 1: Direct Browser Opening
-Double-click `index.html` in Finder or open it directly in Google Chrome / Safari / Edge.
-
-### Option 2: Local HTTP Server
-Run in your terminal:
+The development server is currently live:
 ```bash
-cd /Users/shreevarshan/portfolio
-python3 -m http.server 8080
+# Start development server
+npm run dev
+
+# Or specify host and port
+npm run dev -- --host --port 5173
 ```
-Then visit `http://localhost:8080` in your web browser.
+Visit: **[http://localhost:5173](http://localhost:5173)**
+
+To create an optimized production bundle:
+```bash
+npm run build
+npm run preview
+```
 
 ---
 
-## ✏️ How to Replace the Placeholders
+## 🎮 Interactive Controls Summary
 
-You can click the **"Edit Guide"** button in the website's top navigation bar to open an interactive slide-over cheat sheet, or follow these quick instructions directly in `index.html`:
-
-1. **Education (`#education`):**
-   - Search for `[Expected Graduation:` and update your year (e.g. `2022 – 2026`).
-   - Search for `[Degree Placeholder:` and specify your exact degree (e.g. `B.Tech in Artificial Intelligence & Data Science`).
-
-2. **Skills (`#skills`):**
-   - In each category, replace `[Programming Language 1]`, `[Framework 1]`, `[Database 1]`, etc., with your actual languages (e.g. `Python`, `Java`, `C++`, `React`, `MySQL`, `Git`).
-
-3. **Projects (`#projects`):**
-   - Update `[Project 1 Title]`, `[Project 2 Title]`, `[Project 3 Title]` with your project names.
-   - Fill in the 2-3 sentence description and key bullet points.
-   - Replace the `href="#contact"` placeholder links with your actual GitHub repository URLs.
-
-4. **Contact (`#contact`):**
-   - Replace `[your.email@example.com]` with your email (in both the text and the `mailto:` link).
-   - Replace `[linkedin.com/in/your-profile]` with your LinkedIn link.
-   - Replace `[github.com/your-username]` with your GitHub URL.
-
----
-
-## 📱 Responsive & Accessible Standards
-
-- 100% responsive across mobile phones, tablets, and large desktop screens.
-- Accessible ARIA labels and semantic HTML5 (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`).
-- High-contrast text exceeding WCAG AA standards.
-- Respects `prefers-reduced-motion` for smooth, comfortable browsing.
+| Action | Control | Result |
+| :--- | :--- | :--- |
+| **Parallax Tilt** | Move mouse / pointer | Subtly rotates camera and sculpture |
+| **Scroll Travel** | Scroll mouse wheel | Drives camera through all 5 chapters |
+| **Resonate Core** | Click central sculpture | Fires radial shockwave & audio pulse |
+| **Select Relic** | Click any of the 3 relics | Glides camera to relic & opens HUD |
+| **Free-Fly 3D** | Click "3D FREE-FLY" button | Unlocks full 360° orbital camera |
+| **Audio Toggle** | Click "AUDIO: ON/OFF" | Toggles spatial drone & synth sound |
