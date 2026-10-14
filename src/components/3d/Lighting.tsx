@@ -2,8 +2,13 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Environment, Lightformer } from '@react-three/drei';
 import * as THREE from 'three';
+import type { GSAPSceneState } from '../../hooks/useGSAPScrollTrigger';
 
-export function Lighting() {
+interface LightingProps {
+  sceneState: GSAPSceneState;
+}
+
+export function Lighting({ sceneState }: LightingProps) {
   const blueLightRef = useRef<THREE.PointLight>(null);
   const violetLightRef = useRef<THREE.PointLight>(null);
   const spotlightRef = useRef<THREE.SpotLight>(null);
@@ -17,6 +22,7 @@ export function Lighting() {
       blueLightRef.current.position.x = Math.sin(t) * 8.5;
       blueLightRef.current.position.z = Math.cos(t) * 8.5;
       blueLightRef.current.position.y = Math.sin(t * 0.7) * 3 + 2.5;
+      blueLightRef.current.intensity = sceneState.blueLightIntensity;
     }
 
     // Orbiting counter-balancing neon violet rim light
@@ -24,12 +30,18 @@ export function Lighting() {
       violetLightRef.current.position.x = Math.sin(t + Math.PI) * 9.5;
       violetLightRef.current.position.z = Math.cos(t + Math.PI) * 9.5;
       violetLightRef.current.position.y = Math.cos(t * 0.5) * 3 + 1.0;
+      violetLightRef.current.intensity = sceneState.violetLightIntensity;
     }
 
-    // Subtle breathing intensity on the volumetric cone
+    // Dynamic key spotlight intensity from GSAP
+    if (spotlightRef.current) {
+      spotlightRef.current.intensity = sceneState.keyLightIntensity;
+    }
+
+    // Subtle breathing intensity on the volumetric cone combined with GSAP state
     if (coneRef.current) {
       const mat = coneRef.current.material as THREE.MeshBasicMaterial;
-      mat.opacity = 0.055 + Math.sin(t * 1.5) * 0.015;
+      mat.opacity = sceneState.volumetricOpacity + Math.sin(t * 1.5) * 0.01;
     }
   });
 
@@ -44,7 +56,7 @@ export function Lighting() {
         position={[0, 14, 4]}
         angle={0.45}
         penumbra={0.8}
-        intensity={8.5}
+        intensity={sceneState.keyLightIntensity}
         color="#ffffff"
         castShadow
       />
@@ -55,7 +67,7 @@ export function Lighting() {
         <meshBasicMaterial
           color="#00f0ff"
           transparent
-          opacity={0.06}
+          opacity={sceneState.volumetricOpacity}
           side={THREE.DoubleSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -80,7 +92,7 @@ export function Lighting() {
       <pointLight
         ref={blueLightRef}
         color="#00f0ff"
-        intensity={18}
+        intensity={sceneState.blueLightIntensity}
         distance={28}
         decay={2}
       />
@@ -89,7 +101,7 @@ export function Lighting() {
       <pointLight
         ref={violetLightRef}
         color="#8a2be2"
-        intensity={15}
+        intensity={sceneState.violetLightIntensity}
         distance={26}
         decay={2}
       />
@@ -97,7 +109,6 @@ export function Lighting() {
       {/* Procedural High-Dynamic-Range Studio Environment Map for Chrome Reflections */}
       <Environment resolution={256}>
         <group rotation={[-Math.PI / 4, -0.2, 0.4]}>
-          {/* Overhead Main Softbox */}
           <Lightformer
             form="rect"
             intensity={4}
@@ -105,7 +116,6 @@ export function Lighting() {
             scale={[12, 6]}
             color="#ffffff"
           />
-          {/* Electric Cyan Edge Strip */}
           <Lightformer
             form="ring"
             intensity={3.5}
@@ -113,7 +123,6 @@ export function Lighting() {
             scale={6}
             color="#00f0ff"
           />
-          {/* Neon Violet Edge Strip */}
           <Lightformer
             form="rect"
             intensity={3.0}
@@ -121,7 +130,6 @@ export function Lighting() {
             scale={[8, 4]}
             color="#8a2be2"
           />
-          {/* Subtle Golden Horizon Reflection Accent */}
           <Lightformer
             form="circle"
             intensity={1.5}

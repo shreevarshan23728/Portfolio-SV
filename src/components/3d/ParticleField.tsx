@@ -1,14 +1,15 @@
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import type { GSAPSceneState } from '../../hooks/useGSAPScrollTrigger';
 
 interface ParticleFieldProps {
-  scrollProgress: number;
+  sceneState: GSAPSceneState;
 }
 
-export function ParticleField({ scrollProgress }: ParticleFieldProps) {
+export function ParticleField({ sceneState }: ParticleFieldProps) {
   const pointsRef = useRef<THREE.Points>(null);
-  const count = 2400;
+  const count = 2600;
 
   const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -19,8 +20,7 @@ export function ParticleField({ scrollProgress }: ParticleFieldProps) {
     const colorC = new THREE.Color('#ffffff');
 
     for (let i = 0; i < count; i++) {
-      // Cylindrical / spherical volume spanning deep space
-      const radius = 6 + Math.random() * 32;
+      const radius = 6 + Math.random() * 34;
       const theta = Math.random() * Math.PI * 2;
       const y = (Math.random() - 0.5) * 45;
       const z = (Math.random() - 0.6) * 90;
@@ -29,7 +29,6 @@ export function ParticleField({ scrollProgress }: ParticleFieldProps) {
       pos[i * 3 + 1] = y;
       pos[i * 3 + 2] = z;
 
-      // Color variation between cyan, violet, and silver
       const mix = Math.random();
       const chosenColor = mix < 0.45 ? colorA : mix < 0.85 ? colorB : colorC;
       col[i * 3] = chosenColor.r;
@@ -42,17 +41,18 @@ export function ParticleField({ scrollProgress }: ParticleFieldProps) {
 
   useFrame((_, delta) => {
     if (!pointsRef.current) return;
-    // Base gentle rotation
-    pointsRef.current.rotation.y += delta * 0.03;
-    pointsRef.current.rotation.x = Math.sin(scrollProgress * Math.PI) * 0.2;
+    pointsRef.current.rotation.y += delta * 0.025;
+    pointsRef.current.rotation.x = Math.sin(sceneState.progress * Math.PI) * 0.15;
 
-    // Stream particles forward based on scroll speed
+    // Stream particles forward based on GSAP timeline velocity state
     const positions = pointsRef.current.geometry.attributes.position.array as Float32Array;
+    const velocity = sceneState.particleVelocity;
+
     for (let i = 0; i < count; i++) {
       const idx = i * 3 + 2; // z-axis
-      positions[idx] += delta * (1.2 + scrollProgress * 15);
-      if (positions[idx] > 20) {
-        positions[idx] = -70;
+      positions[idx] += delta * (velocity * 2.2);
+      if (positions[idx] > 22) {
+        positions[idx] = -72;
       }
     }
     pointsRef.current.geometry.attributes.position.needsUpdate = true;
@@ -71,7 +71,7 @@ export function ParticleField({ scrollProgress }: ParticleFieldProps) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.065}
+        size={0.068}
         vertexColors
         transparent
         opacity={0.85}

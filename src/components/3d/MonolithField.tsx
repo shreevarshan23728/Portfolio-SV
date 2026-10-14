@@ -1,15 +1,15 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import type { GSAPSceneState } from '../../hooks/useGSAPScrollTrigger';
 
 interface MonolithFieldProps {
-  scrollProgress: number;
+  sceneState: GSAPSceneState;
 }
 
-export function MonolithField({ scrollProgress }: MonolithFieldProps) {
+export function MonolithField({ sceneState }: MonolithFieldProps) {
   const groupRef = useRef<THREE.Group>(null);
 
-  // 7 Floating Monoliths arranged in an atmospheric cybernetic sanctuary
   const monoliths = [
     { pos: [-6, 3, -16], scale: [1.2, 7.5, 1.2], rot: [0.1, 0.4, 0.05] },
     { pos: [7, 4, -18], scale: [1.4, 9.0, 1.4], rot: [-0.15, -0.3, 0.1] },
@@ -20,7 +20,7 @@ export function MonolithField({ scrollProgress }: MonolithFieldProps) {
     { pos: [0, -8, -38], scale: [3.0, 20.0, 3.0], rot: [0.0, 0.0, 0.0] },
   ];
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock }, delta) => {
     if (!groupRef.current) return;
     const t = clock.getElapsedTime() * 0.4;
 
@@ -30,9 +30,13 @@ export function MonolithField({ scrollProgress }: MonolithFieldProps) {
       child.rotation.y += 0.001 * (i % 2 === 0 ? 1 : -1);
     });
 
-    // Fade in visibility and influence around Section 3 (scrollProgress: 0.35 - 0.7)
-    const factor = Math.min(Math.max((scrollProgress - 0.3) / 0.3, 0), 1);
-    groupRef.current.position.y = THREE.MathUtils.lerp(-4, 0, factor);
+    // Elevation directly driven by GSAP timeline state
+    groupRef.current.position.y = THREE.MathUtils.damp(
+      groupRef.current.position.y,
+      sceneState.monolithY,
+      3.5,
+      delta
+    );
   });
 
   return (
@@ -55,7 +59,7 @@ export function MonolithField({ scrollProgress }: MonolithFieldProps) {
             <meshBasicMaterial
               color={idx % 2 === 0 ? "#00f0ff" : "#8a2be2"}
               transparent
-              opacity={0.8}
+              opacity={sceneState.monolithVeinOpacity}
             />
           </mesh>
 

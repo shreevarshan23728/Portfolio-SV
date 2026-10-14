@@ -3,14 +3,15 @@ import { useFrame } from '@react-three/fiber';
 import { ContactShadows, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import { sound } from '../../utils/sound';
+import type { GSAPSceneState } from '../../hooks/useGSAPScrollTrigger';
 
 interface ChronoCoreProps {
-  scrollProgress: number;
+  sceneState: GSAPSceneState;
   pointer: { x: number; y: number };
   onInteract?: () => void;
 }
 
-export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCoreProps) {
+export function ChronoCore({ sceneState, pointer, onInteract }: ChronoCoreProps) {
   const groupRef = useRef<THREE.Group>(null);
   const ring1Ref = useRef<THREE.Group>(null);
   const ring2Ref = useRef<THREE.Group>(null);
@@ -25,7 +26,6 @@ export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCorePr
   const [shockwaveScale, setShockwaveScale] = useState(0);
   const [energyPulse, setEnergyPulse] = useState(1);
 
-  // Velocity vectors for physical inertia
   const targetRotation = useRef({ x: 0, y: 0 });
 
   const handleClick = (e: { stopPropagation: () => void }) => {
@@ -39,7 +39,7 @@ export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCorePr
   useFrame((_, delta) => {
     if (!groupRef.current) return;
 
-    // Physical spring inertia on pointer movement
+    // Pointer-driven physical tilt
     targetRotation.current.x = pointer.y * 0.45 + Math.sin(Date.now() * 0.0008) * 0.08;
     targetRotation.current.y = pointer.x * 0.6 + (Date.now() * 0.0004);
 
@@ -56,30 +56,31 @@ export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCorePr
       delta
     );
 
-    // Section 2 Transformation Factor (0.05 to 0.45)
-    const transformFactor = Math.min(Math.max((scrollProgress - 0.05) / 0.38, 0), 1);
-    const speedMultiplier = hovered ? 2.4 : 1.0;
+    const speedMultiplier = (hovered ? 2.4 : 1.0) * sceneState.ringRotationSpeed;
 
-    // Ring 1: Primary Heavy Titanium Gimbal
+    // Ring 1: Driven by GSAP ScrollTrigger timeline
     if (ring1Ref.current) {
       ring1Ref.current.rotation.z += delta * 0.32 * speedMultiplier;
-      ring1Ref.current.position.z = THREE.MathUtils.lerp(0, 1.8, transformFactor);
+      ring1Ref.current.position.z = THREE.MathUtils.damp(ring1Ref.current.position.z, sceneState.ring1Z, 4, delta);
     }
 
-    // Ring 2: Chrome Gyro Ring
+    // Ring 2: Driven by GSAP ScrollTrigger timeline
     if (ring2Ref.current) {
       ring2Ref.current.rotation.x += delta * 0.42 * speedMultiplier;
       ring2Ref.current.rotation.y += delta * 0.22 * speedMultiplier;
-      ring2Ref.current.position.z = THREE.MathUtils.lerp(0, -1.8, transformFactor);
+      ring2Ref.current.position.z = THREE.MathUtils.damp(ring2Ref.current.position.z, sceneState.ring2Z, 4, delta);
     }
 
-    // Ring 3: Segmented Iris Ring
+    // Ring 3: Iris Scale driven by GSAP timeline
     if (ring3Ref.current) {
       ring3Ref.current.rotation.y -= delta * 0.38 * speedMultiplier;
-      ring3Ref.current.scale.setScalar(THREE.MathUtils.lerp(1, 1.45, transformFactor));
+      const currentScale = ring3Ref.current.scale.x;
+      const targetScale = sceneState.ring3Scale;
+      const newScale = THREE.MathUtils.damp(currentScale, targetScale, 4, delta);
+      ring3Ref.current.scale.set(newScale, newScale, newScale);
     }
 
-    // Ring 4: Luminous Laser Conduit Ring
+    // Ring 4: Luminous Laser Ring
     if (ring4Ref.current) {
       ring4Ref.current.rotation.z -= delta * 0.55 * speedMultiplier;
       ring4Ref.current.rotation.x += delta * 0.28 * speedMultiplier;
@@ -105,7 +106,7 @@ export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCorePr
       setEnergyPulse(THREE.MathUtils.damp(energyPulse, 1, 3.2, delta));
     }
 
-    // Expanding shockwave ring on click
+    // Shockwave expansion on click
     if (shockwaveScale > 0) {
       const next = shockwaveScale + delta * 9.5;
       if (next > 8.5) {
@@ -123,7 +124,7 @@ export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCorePr
 
   return (
     <group position={[0, 0, 0]}>
-      {/* Ground Pedestal Datum Ring anchoring the sculpture physically */}
+      {/* Ground Pedestal Datum Ring */}
       <mesh
         ref={datumRingRef}
         position={[0, -2.5, 0]}
@@ -206,7 +207,6 @@ export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCorePr
               envMapIntensity={3.2}
             />
           </mesh>
-          {/* Micro-bolts & Detail Lugs on Ring 1 */}
           {[0, Math.PI / 2, Math.PI, (Math.PI * 3) / 2].map((angle, i) => (
             <mesh
               key={i}
@@ -262,7 +262,7 @@ export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCorePr
           </mesh>
         </group>
 
-        {/* 5. Central Quantum Core: Multi-Faceted Faceted Stellation Frame */}
+        {/* 5. Central Quantum Core: Multi-Faceted Stellation Frame */}
         <mesh ref={coreRef} onClick={handleClick}>
           <icosahedronGeometry args={[1.12, 1]} />
           <meshPhysicalMaterial
@@ -278,18 +278,18 @@ export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCorePr
           />
         </mesh>
 
-        {/* 6. Inner Glowing Energy Core with Quantum Sparkles */}
+        {/* 6. Inner Glowing Energy Core */}
         <mesh ref={coreInnerRef}>
           <octahedronGeometry args={[0.72, 0]} />
           <meshStandardMaterial
             color="#00f0ff"
             emissive="#00f0ff"
-            emissiveIntensity={3.2 * energyPulse}
+            emissiveIntensity={sceneState.coreEmissiveIntensity * energyPulse}
             toneMapped={false}
           />
         </mesh>
 
-        {/* Quantum Energy Sparks Swirling around the Core */}
+        {/* Quantum Energy Sparks */}
         <Sparkles
           count={75}
           scale={5.5}
@@ -299,7 +299,7 @@ export function ChronoCore({ scrollProgress, pointer, onInteract }: ChronoCorePr
           opacity={0.85}
         />
 
-        {/* Counter-Spinning Violet Magnetic Nodes */}
+        {/* Counter-Spinning Magnetic Nodes */}
         <group rotation={[0.45, 0.6, 0]}>
           <mesh position={[2.75, 0, 0]}>
             <octahedronGeometry args={[0.18, 0]} />
